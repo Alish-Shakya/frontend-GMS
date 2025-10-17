@@ -1,11 +1,13 @@
 import { useState } from "react";
+import MyRoutes from "./routes/MyRoutes";
+import { BrowserRouter } from "react-router";
 
 function App() {
   return (
     <>
-      <p className="text-4xl text-center text-green-500 p-20">
-        Hello world! welcome to my GMS project
-      </p>
+      <BrowserRouter>
+        <MyRoutes />
+      </BrowserRouter>
     </>
   );
 }
