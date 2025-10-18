@@ -2,67 +2,68 @@ import React, { useState, useEffect } from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 
 const Sidebar = () => {
-  let [greeting, setGreeting] = useState();
-
-  const greetingMessage = () => {
-    const currentHrs = new Date().getHours();
-    if (currentHrs < 12) {
-      setGreeting("Good Morning");
-    } else if (currentHrs < 18) {
-      setGreeting("Good Afternoon");
-    } else if (currentHrs < 21) {
-      setGreeting("Good Night");
-    } else {
-      setGreeting("Good Night");
-    }
-  };
+  const [greeting, setGreeting] = useState("");
 
   useEffect(() => {
-    greetingMessage();
-  });
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting("Good Morning");
+    else if (hour < 18) setGreeting("Good Afternoon");
+    else setGreeting("Good Evening");
+  }, []);
 
   return (
-    <div className="w-1/4 h-[100vh] border-2 border-black bg-black text-white font-extralight p-5">
-      <div className="text-center text-3xl">Planet Fitness Kapan</div>
-
-      <div className="flex gap-5 my-5">
-        <div className="w-[100px] h-[100px] rounded-lg">
-          <img
-            src="images/gym-bg.png"
-            alt="pic"
-            className="w-full rounded-full h-full"
-          />
+    <div className="w-full md:w-1/4 h-[100vh] bg-white border-r border-gray-200 text-gray-800 p-6 flex flex-col justify-between shadow-md">
+      {/* Top Section */}
+      <div>
+        {/* Logo */}
+        <div className="flex items-center justify-center mb-8">
+          <FitnessCenterIcon sx={{ fontSize: 40, color: "" }} />
+          <h1 className="ml-3 text-2xl font-bold tracking-wider text-yellow-400">
+            Planet Fitness
+          </h1>
         </div>
 
-        <div>
-          <div className="text-2xl">{greeting}</div>
-          <div className="text-xl font-semibold mt-1">Admin</div>
+        {/* Profile */}
+        <div className="flex gap-4 items-center bg-gray-100 rounded-xl p-4 shadow-sm hover:shadow-md transition">
+          <img
+            src="/images/profile.png"
+            alt="Admin"
+            className="w-16 h-16 rounded-full object-cover border-2 border-red-500"
+          />
+          <div>
+            <h2 className="text-lg font-semibold">{greeting}</h2>
+            <p className="text-gray-500 text-sm">Admin</p>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div className="mt-10 border-t border-gray-200 pt-6 space-y-3">
+          {[
+            { title: "Dashboard", icon: <HomeIcon /> },
+            { title: "Members", icon: <PeopleIcon /> },
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="flex items-center gap-3 hover:bg-red-100 transition-all duration-200 cursor-pointer px-4 py-3 rounded-lg font-semibold tracking-wide hover:text-red-600"
+            >
+              <div>{item.icon}</div>
+              <div>{item.title}</div>
+            </div>
+          ))}
+
+          <div className="flex items-center gap-3 text-red-600 hover:bg-red-50 transition-all duration-200 cursor-pointer px-4 py-3 rounded-lg font-semibold tracking-wide mt-6">
+            <LogoutIcon />
+            <span>Logout</span>
+          </div>
         </div>
       </div>
 
-      <div className="mt-10 py-10 border-t-2 border-gray-700">
-        <div className="cursor-pointer rounded-xl flex gap-2 font-semibold text-xl bg-slate-800 p-3">
-          <div>
-            <HomeIcon />
-          </div>
-          <div>dashboard</div>
-        </div>
-
-        <div className="mt-5 cursor-pointer rounded-xl flex gap-2 font-semibold text-xl bg-slate-800 p-3">
-          <div>
-            <PeopleIcon />
-          </div>
-          <div>Members</div>
-        </div>
-
-        <div className="mt-5 cursor-pointer rounded-xl flex gap-2 font-semibold text-xl bg-slate-800 p-3">
-          <div>
-            <LogoutIcon />
-          </div>
-          <div>Logout</div>
-        </div>
+      {/* Footer */}
+      <div className="text-center text-gray-400 text-sm border-t border-gray-200 pt-4">
+        © {new Date().getFullYear()} Planet Fitness
       </div>
     </div>
   );

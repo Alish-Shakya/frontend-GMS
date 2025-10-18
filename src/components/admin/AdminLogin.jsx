@@ -10,7 +10,6 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!email || !password) {
       setErrorMessage("Please fill in all fields!");
       setTimeout(() => setErrorMessage(""), 4000);
@@ -24,6 +23,7 @@ const AdminLogin = () => {
       });
 
       localStorage.setItem("token", data.token);
+      sessionStorage.setItem("isLogin", "true");
       navigate("/dashboard");
     } catch (error) {
       console.error(error);
