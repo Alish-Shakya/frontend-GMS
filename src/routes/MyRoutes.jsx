@@ -11,7 +11,7 @@ const MyRoutes = () => {
         <Route path="/" element={<AdminLogin />}></Route>
         <Route path="verify-email" element={<AdminVerify />}></Route>
 
-        <Route path="home" element={<Dashboard />}></Route>
+        <Route path="dashboard" element={<Dashboard />}></Route>
 
         {/* Admin Route */}
         <Route path="admin" element={<Outlet />}>

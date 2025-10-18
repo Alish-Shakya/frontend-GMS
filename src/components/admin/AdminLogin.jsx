@@ -3,60 +3,66 @@ import { Link, useNavigate } from "react-router";
 import axios from "axios";
 
 const AdminLogin = () => {
-  let [email, setEmail] = useState("");
-  let [password, setPassword] = useState("");
-  let [errorMessage, setErrorMessage] = useState("");
-
-  let navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
-      setErrorMessage("Please fill in all the fields!");
-      setTimeout(() => setErrorMessage(""), 5000);
+      setErrorMessage("Please fill in all fields!");
+      setTimeout(() => setErrorMessage(""), 4000);
       return;
     }
 
-    let data = { email, password };
-
     try {
-      let result = await axios({
-        url: "http://localhost:4000/webUser/login",
-        method: "post",
-        data: data,
+      const { data } = await axios.post("http://localhost:4000/webUser/login", {
+        email,
+        password,
       });
 
-      let token = result.data.token;
-      localStorage.setItem("token", token);
-      navigate("/home");
+      localStorage.setItem("token", data.token);
+      navigate("/dashboard");
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setErrorMessage("Invalid email or password");
-      setTimeout(() => setErrorMessage(""), 2000);
+      setTimeout(() => setErrorMessage(""), 3000);
     }
   };
 
   return (
-    <div className="w-full min-h-screen bg-cover bg-center bg-no-repeat bg-gray-100 flex flex-col">
-      <div className="flex flex-col md:flex-row justify-center items-center flex-1 gap-10 md:gap-[150px] px-4">
+    <div className="w-full min-h-screen bg-[url('/images/gym-bg.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center px-6">
+      {/* Dark overlay for better contrast */}
+      <div className="absolute inset-0 bg-black/70"></div>
+
+      <div className="relative z-10 flex flex-col md:flex-row justify-center items-center gap-10 md:gap-[120px] w-full max-w-6xl">
         {/* Left Section */}
-        <div className="text-center md:text-left text-gray-800">
-          <h1 className="text-4xl md:text-5xl font-bold drop-shadow-lg">
-            Gym Management System
+        <div className="text-center md:text-left text-white space-y-4">
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-wide">
+            <span className="text-red-600">GYM</span> <br />
+            MANAGEMENT SYSTEM
           </h1>
-          <p className="text-gray-500 font-medium mt-4 max-w-md">
-            Powering your fitness business toward growth and excellence.
+          <p className="text-gray-300 font-medium max-w-md leading-relaxed">
+            Manage your fitness business with power, precision, and performance.
+          </p>
+          <p className="uppercase text-sm tracking-widest text-gray-400">
+            Train Hard. Manage Smart.
           </p>
         </div>
 
         {/* Right Section - Login Form */}
-        <div className="bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-xl shadow-lg w-full max-w-sm">
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
+        <div className="bg-gray-900/90 backdrop-blur-md p-8 rounded-2xl shadow-xl w-full max-w-sm border border-red-600/40">
+          <h2 className="text-center text-2xl font-bold text-white mb-6 tracking-wide">
+            Admin Login
+          </h2>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-semibold text-gray-300 mb-1"
               >
                 Email
               </label>
@@ -65,15 +71,15 @@ const AdminLogin = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your email"
+                className="w-full px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-400"
+                placeholder="admin@example.com"
               />
             </div>
 
-            <div className="mb-6">
+            <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-semibold text-gray-300 mb-1"
               >
                 Password
               </label>
@@ -82,34 +88,38 @@ const AdminLogin = () => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-400"
                 placeholder="Enter your password"
               />
             </div>
 
             {errorMessage && (
-              <div className="mb-4 text-red-600 text-sm font-medium">
+              <div className="text-red-500 text-sm font-medium text-center">
                 {errorMessage}
               </div>
             )}
 
-            <div>
+            <button
+              type="submit"
+              className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-lg transition duration-300 tracking-wide shadow-md"
+            >
+              LOGIN
+            </button>
+
+            <div className="flex justify-between items-center mt-4 text-sm text-gray-300">
               <button
-                type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+                type="button"
+                className="hover:text-red-500 transition duration-200"
               >
-                Login
-              </button>
-            </div>
-
-            <div className="flex justify-between items-center mt-4 text-sm">
-              <button type="button" className="text-blue-600 hover:underline">
-                Forgot Password
+                Forgot Password?
               </button>
 
-              <button type="button" className="text-blue-600 hover:underline">
-                <Link to={"/admin/register"}>Create Account</Link>
-              </button>
+              <Link
+                to={"/admin/register"}
+                className="hover:text-red-500 transition duration-200"
+              >
+                Create Account
+              </Link>
             </div>
           </form>
         </div>
