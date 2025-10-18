@@ -3,12 +3,15 @@ import { Routes, Route, Outlet } from "react-router";
 import AdminLogin from "../components/admin/AdminLogin";
 import AdminRegister from "../components/admin/AdminRegister";
 import AdminVerify from "../components/admin/AdminVerify";
+import Dashboard from "../components/home/Dashboard";
 const MyRoutes = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<AdminLogin />}></Route>
         <Route path="verify-email" element={<AdminVerify />}></Route>
+
+        <Route path="home" element={<Dashboard />}></Route>
 
         {/* Admin Route */}
         <Route path="admin" element={<Outlet />}>
