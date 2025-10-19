@@ -16,13 +16,14 @@ const MyRoutes = () => {
         <Route path="/" element={<AdminLogin />}></Route>
         <Route path="verify-email" element={<AdminVerify />}></Route>
 
-        <Route path="dashboard" element={<Dashboard />}></Route>
-
-        <Route path="addMembers" element={<AddMembers />}></Route>
-        <Route path="totalMembers" element={<TotalMembers />}></Route>
-        <Route path="newMembers" element={<NewMember />}></Route>
-        <Route path="expiringSoon" element={<ExpiringSoon />}></Route>
-        <Route path="expired" element={<Expired />}></Route>
+        <Route path="dashboard" element={<Outlet />}>
+          <Route index element={<Dashboard />}></Route>
+          <Route path="add-members" element={<AddMembers />} />
+          <Route path="total-members" element={<TotalMembers />} />
+          <Route path="new-members" element={<NewMember />} />
+          <Route path="expiring-soon" element={<ExpiringSoon />} />
+          <Route path="expired" element={<Expired />} />
+        </Route>
 
         {/* Admin Route */}
         <Route path="admin" element={<Outlet />}>

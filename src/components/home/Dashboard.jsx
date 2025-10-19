@@ -38,7 +38,7 @@ const Dashboard = () => {
       <div className="grid mt-8 gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((card, index) => (
           <div
-            onClick={() => navigate("/addMembers")}
+            onClick={() => navigate(card.path)}
             key={index}
             className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
           >

@@ -1,7 +1,7 @@
 import React from "react";
 
 const Expired = () => {
-  return <div></div>;
+  return <div>Member Expired</div>;
 };
 
 export default Expired;
