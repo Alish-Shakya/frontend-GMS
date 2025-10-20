@@ -45,6 +45,7 @@ const TotalMembers = () => {
     setCurrentPage(1);
   }, [searchTerm, members]);
 
+  // Restored Pagination Logic
   const indexOfLastMember = currentPage * membersPerPage;
   const indexOfFirstMember = indexOfLastMember - membersPerPage;
   const currentMembers = filteredMembers.slice(
@@ -59,40 +60,37 @@ const TotalMembers = () => {
     currentPage < totalPages && setCurrentPage(currentPage + 1);
 
   return (
-    <div className="w-full md:w-3/4 h-screen flex flex-col bg-gradient-to-br from-white via-gray-50 to-gray-100 text-gray-800 p-6 rounded-tl-3xl shadow-inner">
+    // 1. REMOVED h-screen - Component will now grow vertically
+    <div className="w-full md:w-4/5 mx-auto flex flex-col bg-gray-100 text-gray-800 p-6 overflow-hidden">
       <ToastContainer />
 
       {/* Header */}
-      <div className="flex-shrink-0 flex justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+      <div className="flex justify-between items-center mb-5">
         <div className="flex items-center gap-3">
-          <PeopleIcon className="text-yellow-400 text-3xl" />
-          <h2 className="text-xl font-bold tracking-wide text-yellow-400">
+          <PeopleIcon className="text-gray-800 text-3xl" />
+          <h2 className="text-xl font-bold tracking-wide text-gray-800">
             Total Members
           </h2>
         </div>
-        <img
-          src="/images/profile.png"
-          alt="Admin"
-          className="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover"
-        />
-      </div>
 
-      {/* Search Bar */}
-      <div className="flex-shrink-0 max-w-4xl mx-auto mt-5 flex items-center bg-white border border-gray-200 rounded-full shadow-sm px-4 py-2 focus-within:ring-2 focus-within:ring-yellow-400 transition">
-        <SearchIcon className="text-gray-400 mr-2" />
-        <input
-          type="text"
-          placeholder="Search by name, phone, or plan..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-400"
-        />
+        {/* Search Bar */}
+        <div className="flex items-center bg-gray-100 px-2 py-1 rounded-md border border-gray-300 w-56">
+          <SearchIcon className="text-gray-400 mr-1" fontSize="small" />
+          <input
+            type="text"
+            placeholder="Search Member"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 w-full"
+          />
+        </div>
       </div>
 
       {/* Members Grid */}
-      <div className="flex-1 overflow-y-auto mt-5 pb-4">
+
+      <div className="mt-5 pb-4">
         {loading ? (
-          <div className="flex justify-center items-center h-full">
+          <div className="flex justify-center items-center h-40">
             <CircularProgress style={{ color: "#facc15" }} />
           </div>
         ) : currentMembers.length === 0 ? (
@@ -100,18 +98,17 @@ const TotalMembers = () => {
             No members found 😕
           </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 px-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2">
             {currentMembers.map((m) => (
               <div
                 key={m._id}
-                className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                className="bg-white border border-gray-200 rounded-xl shadow hover:shadow-lg transition-transform hover:-translate-y-1"
               >
-                <div className="h-2 rounded-t-xl bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
                 <div className="flex flex-col items-center p-5">
                   <img
                     src={`http://localhost:4000${m.photo}`}
                     alt={m.fullName}
-                    className="w-20 h-20 rounded-full object-cover border-4 border-yellow-400 shadow-md"
+                    className="w-20 h-20 rounded-full object-cover border-4 border-yellow-400 shadow"
                   />
                   <h3 className="mt-3 text-base font-semibold text-gray-800">
                     {m.fullName}
@@ -119,7 +116,7 @@ const TotalMembers = () => {
                   <p className="text-sm text-gray-500">{m.address}</p>
                   <p className="text-sm text-gray-500">📞 {m.phone}</p>
                 </div>
-                <div className="border-t border-gray-100 p-3 text-center bg-gray-50 rounded-b-xl">
+                <div className="border-t border-gray-100 p-3 text-center bg-gray-100 rounded-b-xl">
                   <p className="text-sm font-medium text-gray-700">
                     Plan:{" "}
                     <span className="text-yellow-500 font-semibold">
@@ -140,35 +137,37 @@ const TotalMembers = () => {
         )}
       </div>
 
-      {/* Pagination */}
-      <div className="flex-shrink-0 flex justify-center items-center gap-4 mt-4">
-        <button
-          onClick={handlePrev}
-          disabled={currentPage === 1}
-          className={`flex items-center gap-1 px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-yellow-50 hover:text-yellow-600 transition ${
-            currentPage === 1 && "opacity-50 cursor-not-allowed"
-          }`}
-        >
-          <ArrowBackIosNewIcon sx={{ fontSize: 16 }} /> Prev
-        </button>
+      {/* Pagination - Restored */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4 mt-6">
+          <button
+            onClick={handlePrev}
+            disabled={currentPage === 1}
+            className={`flex items-center gap-1 px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-yellow-50 hover:text-yellow-600 transition ${
+              currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            <ArrowBackIosNewIcon sx={{ fontSize: 16 }} /> Prev
+          </button>
 
-        <span className="text-gray-700 font-semibold">
-          Page {currentPage} of {totalPages}
-        </span>
+          <span className="text-gray-700 font-semibold">
+            Page {currentPage} of {totalPages}
+          </span>
 
-        <button
-          onClick={handleNext}
-          disabled={currentPage === totalPages}
-          className={`flex items-center gap-1 px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-yellow-50 hover:text-yellow-600 transition ${
-            currentPage === totalPages && "opacity-50 cursor-not-allowed"
-          }`}
-        >
-          Next <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
-        </button>
-      </div>
+          <button
+            onClick={handleNext}
+            disabled={currentPage === totalPages}
+            className={`flex items-center gap-1 px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-yellow-50 hover:text-yellow-600 transition ${
+              currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            Next <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
+          </button>
+        </div>
+      )}
 
       {/* Footer */}
-      <div className="text-center mt-3 text-gray-500 italic flex-shrink-0">
+      <div className="text-center mt-6 text-gray-500 italic">
         <FitnessCenterIcon sx={{ color: "#facc15", fontSize: 20 }} /> Manage
         Smart. Train Hard 💪
       </div>

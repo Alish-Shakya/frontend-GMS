@@ -35,7 +35,7 @@ const Dashboard = () => {
   const COLORS = ["#4F46E5", "#F59E0B"];
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen overflow-hidden">
+    <div className="p-6 w-full md:w-4/5 mx-auto bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-semibold text-gray-800 mb-6">
         🏋️‍♂️ Admin Dashboard
       </h1>
@@ -59,31 +59,37 @@ const Dashboard = () => {
           </div>
         </Link>
 
-        <div className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition">
-          <div className="flex justify-between items-center">
-            <div>
-              <p className="text-gray-500 text-sm">New This Month</p>
-              <h2 className="text-3xl font-bold mt-1">85</h2>
-              <p className="text-green-500 text-xs mt-1">+12% vs last month</p>
-            </div>
-            <div className="bg-green-100 p-3 rounded-full">
-              <PersonAddIcon className="text-green-600" />
+        <Link to="/dashboard/new-members">
+          <div className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-gray-500 text-sm">New This Month</p>
+                <h2 className="text-3xl font-bold mt-1">85</h2>
+                <p className="text-green-500 text-xs mt-1">
+                  +12% vs last month
+                </p>
+              </div>
+              <div className="bg-green-100 p-3 rounded-full">
+                <PersonAddIcon className="text-green-600" />
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
 
-        <div className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition">
-          <div className="flex justify-between items-center">
-            <div>
-              <p className="text-gray-500 text-sm">Upcoming Renewals</p>
-              <h2 className="text-3xl font-bold mt-1">42</h2>
-              <p className="text-green-500 text-xs mt-1">+5% this month</p>
-            </div>
-            <div className="bg-yellow-100 p-3 rounded-full">
-              <AutorenewIcon className="text-yellow-600" />
+        <Link to="/dashboard/expiring-soon">
+          <div className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-gray-500 text-sm">Upcoming Renewals</p>
+                <h2 className="text-3xl font-bold mt-1">42</h2>
+                <p className="text-green-500 text-xs mt-1">+5% this month</p>
+              </div>
+              <div className="bg-yellow-100 p-3 rounded-full">
+                <AutorenewIcon className="text-yellow-600" />
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
 
         <Link to="/dashboard/add-members">
           <div className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition">
