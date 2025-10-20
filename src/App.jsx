@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import MyRoutes from "./routes/MyRoutes";
 import Sidebar from "./components/home/Sidebar";
+import { ThemeProvider } from "./ThemeContext";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -17,11 +18,13 @@ function App() {
   }, [location.pathname]); // re-check when route changes
 
   return (
-    <div className="flex">
-      {/* Show Sidebar only when logged in and not on /admin/login */}
-      {isLogin && location.pathname !== "/" && <Sidebar />}
-      <MyRoutes />
-    </div>
+    <ThemeProvider>
+      <div className="flex">
+        {/* Show Sidebar only when logged in and not on /admin/login */}
+        {isLogin && location.pathname !== "/" && <Sidebar />}
+        <MyRoutes />
+      </div>
+    </ThemeProvider>
   );
 }
 
