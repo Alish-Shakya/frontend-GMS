@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
 import HomeIcon from "@mui/icons-material/Home";
 import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -12,15 +11,31 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const Sidebar = () => {
   const [greeting, setGreeting] = useState("");
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Set greeting based on time
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour < 12) setGreeting("Good Morning");
     else if (hour < 18) setGreeting("Good Afternoon");
     else setGreeting("Good Evening");
   }, []);
+
+  // Load user info from localStorage
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
 
   const menuItems = [
     { title: "Dashboard", icon: <HomeIcon />, path: "/dashboard" },
@@ -41,7 +56,7 @@ const Sidebar = () => {
 
   return (
     <div className="w-1/4 h-screen bg-[#0f172a] text-white flex flex-col justify-between sticky top-0 shadow-xl">
-      {/* Logo Section */}
+      {/* Logo */}
       <div>
         <div className="flex items-center gap-2 justify-center py-6 border-b border-gray-700">
           <FitnessCenterIcon sx={{ fontSize: 30, color: "#FACC15" }} />
@@ -53,15 +68,19 @@ const Sidebar = () => {
         {/* Greeting / Profile */}
         <div className="flex items-center gap-4 bg-slate-800 p-4 rounded-lg mx-4 mt-6">
           <img
-            src="/images/profile.png"
-            alt="Admin"
+            src={
+              user?.photo
+                ? `http://localhost:4000${user.photo}` // photo path from backend
+                : "/images/profile.png" // default
+            }
+            alt={user?.userName || "User"}
             className="w-12 h-12 rounded-full border-2 border-yellow-400 object-cover"
           />
           <div>
             <h2 className="text-sm font-semibold text-yellow-300">
               {greeting}
             </h2>
-            <p className="text-xs text-gray-400">Admin</p>
+            <p className="text-xs text-gray-400">{user?.userName || "Guest"}</p>
           </div>
         </div>
 
@@ -91,7 +110,7 @@ const Sidebar = () => {
       {/* Footer */}
       <div className="border-t border-gray-700 p-4">
         <div
-          onClick={() => console.log("Logout clicked")}
+          onClick={handleLogout}
           className="flex items-center gap-2 justify-center text-red-400 hover:text-red-300 cursor-pointer transition"
         >
           <LogoutIcon />

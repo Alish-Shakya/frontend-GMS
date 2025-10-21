@@ -8,7 +8,6 @@ import AddMembers from "../components/pages/AddMembers";
 import TotalMembers from "../components/pages/TotalMembers";
 import NewMember from "../components/pages/NewMember";
 import ExpiringSoon from "../components/pages/ExpiringSoon";
-import Expired from "../components/pages/Expired";
 const MyRoutes = () => {
   return (
     <>
@@ -22,7 +21,6 @@ const MyRoutes = () => {
           <Route path="total-members" element={<TotalMembers />} />
           <Route path="new-members" element={<NewMember />} />
           <Route path="expiring-soon" element={<ExpiringSoon />} />
-          <Route path="expired" element={<Expired />} />
         </Route>
 
         {/* Admin Route */}
