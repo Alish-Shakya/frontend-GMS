@@ -8,6 +8,7 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import SettingsIcon from "@mui/icons-material/Settings";
 import GroupsIcon from "@mui/icons-material/Groups";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import AdminLogout from "../admin/AdminLogout";
 
 const Sidebar = () => {
   const [greeting, setGreeting] = useState("");
@@ -110,7 +111,7 @@ const Sidebar = () => {
       {/* Footer */}
       <div className="border-t border-gray-700 p-4">
         <div
-          onClick={handleLogout}
+          onClick={() => navigate("/logout")}
           className="flex items-center gap-2 justify-center text-red-400 hover:text-red-300 cursor-pointer transition"
         >
           <LogoutIcon />

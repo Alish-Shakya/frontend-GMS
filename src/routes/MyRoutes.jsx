@@ -8,12 +8,14 @@ import AddMembers from "../components/pages/AddMembers";
 import TotalMembers from "../components/pages/TotalMembers";
 import NewMember from "../components/pages/NewMember";
 import ExpiringSoon from "../components/pages/ExpiringSoon";
+import AdminLogout from "../components/admin/AdminLogout";
 const MyRoutes = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<AdminLogin />}></Route>
         <Route path="verify-email" element={<AdminVerify />}></Route>
+        <Route path="logout" element={<AdminLogout />}></Route>
 
         <Route path="dashboard" element={<Outlet />}>
           <Route index element={<Dashboard />}></Route>
