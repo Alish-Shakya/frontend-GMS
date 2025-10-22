@@ -9,6 +9,7 @@ import TotalMembers from "../components/pages/TotalMembers";
 import NewMember from "../components/pages/NewMember";
 import ExpiringSoon from "../components/pages/ExpiringSoon";
 import AdminLogout from "../components/admin/AdminLogout";
+import AdminProfile from "../components/admin/AdminProfile";
 const MyRoutes = () => {
   return (
     <>
@@ -30,6 +31,7 @@ const MyRoutes = () => {
           <Route index element={<div> Admin Dashboard</div>} />
           <Route path="register" element={<AdminRegister />}></Route>
           <Route path="login" element={<AdminLogin />}></Route>
+          <Route path="myProfile" element={<AdminProfile />}></Route>
         </Route>
       </Routes>
     </>

@@ -14,7 +14,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   // Static data
