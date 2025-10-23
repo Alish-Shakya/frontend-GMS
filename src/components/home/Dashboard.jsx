@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -15,9 +15,32 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Dashboard = () => {
-  // Static data
+  let [totalMember, SetTotalMember] = useState([]);
+
+  const token = localStorage.getItem("token");
+
+  const getTotalMember = async () => {
+    try {
+      const result = await axios({
+        url: "http://localhost:4000/member/all-members",
+        method: "get",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      SetTotalMember(result.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getTotalMember();
+  }, []);
+
   const lineData = [
     { month: "Jan", members: 40 },
     { month: "Feb", members: 70 },
@@ -47,7 +70,9 @@ const Dashboard = () => {
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-gray-500 text-sm">Total Members</p>
-                <h2 className="text-3xl font-bold mt-1">1,250</h2>
+                <h2 className="text-3xl font-bold mt-1">
+                  {totalMember.length}
+                </h2>
                 <p className="text-green-500 text-xs mt-1">
                   +3.5% vs last month
                 </p>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 const AdminProfile = () => {
   const [profile, setProfile] = useState({});
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   const getProfile = async () => {
     try {
@@ -12,6 +14,7 @@ const AdminProfile = () => {
         method: "get",
         headers: { Authorization: `Bearer ${token}` },
       });
+      // console.log(result);
       setProfile(result.data.result);
     } catch (error) {
       console.log(
@@ -45,17 +48,28 @@ const AdminProfile = () => {
             {profile.userName}
           </h1>
           <p className="text-gray-500">{profile.email}</p>
+          <p className="text-gray-500">{profile.contactNo}</p>
         </div>
 
         {/* Buttons */}
         <div className="flex flex-col gap-4">
-          <button className="w-full py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition duration-300">
+          <button
+            onClick={() => navigate("/admin/update")}
+            className="w-full py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition duration-300"
+          >
             Update Profile
           </button>
           <button className="w-full py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition duration-300">
             Delete Profile
           </button>
         </div>
+
+        <button
+          onClick={() => navigate(-1)} // go to previous page
+          className="mt-4 w-25 ml-33 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition duration-300"
+        >
+          Close
+        </button>
       </div>
     </div>
   );
