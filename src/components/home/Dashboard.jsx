@@ -19,6 +19,7 @@ import axios from "axios";
 
 const Dashboard = () => {
   let [totalMember, SetTotalMember] = useState([]);
+  let [newMember, setNewMember] = useState([]);
 
   const token = localStorage.getItem("token");
 
@@ -37,8 +38,24 @@ const Dashboard = () => {
     }
   };
 
+  const getNewMember = async () => {
+    try {
+      const result = await axios({
+        url: "http://localhost:4000/member/new-member",
+        method: "get",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setNewMember(result.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getTotalMember();
+    getNewMember();
   }, []);
 
   const lineData = [
@@ -89,7 +106,7 @@ const Dashboard = () => {
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-gray-500 text-sm">New This Month</p>
-                <h2 className="text-3xl font-bold mt-1">85</h2>
+                <h2 className="text-3xl font-bold mt-1">{newMember.length}</h2>
                 <p className="text-green-500 text-xs mt-1">
                   +12% vs last month
                 </p>
