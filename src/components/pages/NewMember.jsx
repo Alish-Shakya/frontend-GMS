@@ -13,6 +13,7 @@ const NewMembers = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      // console.log(result.data.data);
       setNewMembers(result.data.data);
     } catch (error) {
       console.error("Error fetching new members:", error);
@@ -55,7 +56,7 @@ const NewMembers = () => {
                   <td className="py-2">{member.fullName}</td>
                   <td className="py-2">{member.phone}</td>
                   <td className="py-2">{member.address}</td>
-                  <td className="py-2">{member.membershipType}</td>
+                  <td className="py-2">{member.membership}</td>
                   <td className="py-2 text-right">
                     {new Date(member.startDate).toLocaleDateString()}
                   </td>
