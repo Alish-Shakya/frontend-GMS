@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { Modal, Box } from "@mui/material";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminRegister = () => {
   const [userName, setUserName] = useState("");
@@ -9,6 +11,11 @@ const AdminRegister = () => {
   const [contactNo, setContactNo] = useState("");
   const [photo, setPhoto] = useState(null);
 
+  const [otp, setOtp] = useState("");
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+
+  // Submit registration form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -23,25 +30,64 @@ const AdminRegister = () => {
       const result = await axios.post(
         "http://localhost:4000/webUser/register",
         formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      toast.success(result.data.message);
-      console.log(result.data);
-
-      // Optional: Save user info for Sidebar
-      localStorage.setItem("user", JSON.stringify(result.data.result));
-
-      setUserName("");
-      setEmail("");
-      setPassword("");
-      setContactNo("");
-      setPhoto(null);
+      toast.success("OTP sent to your email!");
+      setMessage("OTP sent to your email!");
+      setOpen(true); // show OTP modal
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Registration failed!");
+    }
+  };
+
+  // Verify OTP and auto-login
+  const handleVerifyOTP = async () => {
+    try {
+      const verifyRes = await axios.post(
+        "http://localhost:4000/webUser/verify-otp",
+        { email, otp }
+      );
+
+      if (verifyRes.data.success) {
+        setMessage("OTP verified successfully!");
+
+        // ✅ Auto-login
+        const loginRes = await axios.post(
+          "http://localhost:4000/webUser/login",
+          {
+            email,
+            password,
+          }
+        );
+
+        if (loginRes.data.success) {
+          const token = loginRes.data.token;
+
+          // ✅ Save token
+          localStorage.setItem("token", token);
+
+          // ✅ Immediately fetch updated profile
+          const profileRes = await axios.get(
+            "http://localhost:4000/webUser/myProfile",
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+
+          if (profileRes.data.success) {
+            localStorage.setItem(
+              "user",
+              JSON.stringify(profileRes.data.result)
+            );
+          }
+
+          toast.success("🎉 Admin logged in successfully!");
+          setOpen(false);
+          window.location.href = "/dashboard";
+        }
+      }
+    } catch (err) {
+      setMessage(err.response?.data?.message || "Invalid OTP");
     }
   };
 
@@ -69,6 +115,7 @@ const AdminRegister = () => {
               onChange={(e) => setUserName(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg"
               placeholder="Enter your username"
+              required
             />
           </div>
 
@@ -83,6 +130,7 @@ const AdminRegister = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg"
               placeholder="Enter your email"
+              required
             />
           </div>
 
@@ -97,6 +145,7 @@ const AdminRegister = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg"
               placeholder="Enter your password"
+              required
             />
           </div>
 
@@ -134,6 +183,42 @@ const AdminRegister = () => {
             Register
           </button>
         </form>
+
+        {/* OTP Modal */}
+        <Modal open={open} onClose={() => setOpen(false)}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 300,
+              bgcolor: "white",
+              borderRadius: 2,
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            <h3 className="text-lg font-semibold mb-2">Enter OTP</h3>
+            <p className="mb-3 text-sm text-gray-600">
+              We sent an OTP to <strong>{email}</strong>
+            </p>
+            <input
+              type="text"
+              placeholder="Enter OTP"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              className="w-full px-3 py-2 border rounded mb-3 text-center"
+            />
+            <button
+              onClick={handleVerifyOTP}
+              className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+            >
+              Verify & Login
+            </button>
+            {message && <p className="text-red-500 mt-2">{message}</p>}
+          </Box>
+        </Modal>
       </div>
     </>
   );
