@@ -20,6 +20,7 @@ import axios from "axios";
 const Dashboard = () => {
   let [totalMember, SetTotalMember] = useState([]);
   let [newMember, setNewMember] = useState([]);
+  let [expiringMember, setExpiringMember] = useState([]);
 
   const token = localStorage.getItem("token");
 
@@ -53,9 +54,25 @@ const Dashboard = () => {
     }
   };
 
+  const getExpiringMembers = async () => {
+    try {
+      let result = await axios({
+        url: "http://localhost:4000/member/expiring-members",
+        method: "get",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setExpiringMember(result.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getTotalMember();
     getNewMember();
+    getExpiringMembers();
   }, []);
 
   const lineData = [
@@ -123,7 +140,9 @@ const Dashboard = () => {
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-gray-500 text-sm">Upcoming Renewals</p>
-                <h2 className="text-3xl font-bold mt-1">42</h2>
+                <h2 className="text-3xl font-bold mt-1">
+                  {expiringMember.length}
+                </h2>
                 <p className="text-green-500 text-xs mt-1">+5% this month</p>
               </div>
               <div className="bg-yellow-100 p-3 rounded-full">
