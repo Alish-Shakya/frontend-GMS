@@ -4,21 +4,19 @@ import { ToastContainer, toast } from "react-toastify";
 import { Modal, Box } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css";
 
-const AdminRegister = () => {
+const AdminRegister = ({ onSwitch }) => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [contactNo, setContactNo] = useState("");
   const [photo, setPhoto] = useState(null);
-
   const [otp, setOtp] = useState("");
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Submit registration form
+  // handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append("userName", userName);
     formData.append("email", email);
@@ -27,22 +25,17 @@ const AdminRegister = () => {
     if (photo) formData.append("photo", photo);
 
     try {
-      const result = await axios.post(
-        "http://localhost:4000/webUser/register",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-
+      await axios.post("http://localhost:4000/webUser/register", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       toast.success("OTP sent to your email!");
-      setMessage("OTP sent to your email!");
-      setOpen(true); // show OTP modal
+      setOpen(true);
     } catch (error) {
-      console.error(error);
       toast.error(error.response?.data?.message || "Registration failed!");
     }
   };
 
-  // Verify OTP and auto-login
+  // verify otp and auto-login
   const handleVerifyOTP = async () => {
     try {
       const verifyRes = await axios.post(
@@ -51,37 +44,25 @@ const AdminRegister = () => {
       );
 
       if (verifyRes.data.success) {
-        setMessage("OTP verified successfully!");
-
-        // ✅ Auto-login
         const loginRes = await axios.post(
           "http://localhost:4000/webUser/login",
-          {
-            email,
-            password,
-          }
+          { email, password }
         );
 
         if (loginRes.data.success) {
           const token = loginRes.data.token;
-
-          // ✅ Save token
           localStorage.setItem("token", token);
-
-          // ✅ Immediately fetch updated profile
           const profileRes = await axios.get(
             "http://localhost:4000/webUser/myProfile",
             { headers: { Authorization: `Bearer ${token}` } }
           );
-
           if (profileRes.data.success) {
             localStorage.setItem(
               "user",
               JSON.stringify(profileRes.data.result)
             );
           }
-
-          toast.success("🎉 Admin logged in successfully!");
+          toast.success("🎉 Registered & logged in successfully!");
           setOpen(false);
           window.location.href = "/dashboard";
         }
@@ -94,132 +75,115 @@ const AdminRegister = () => {
   return (
     <>
       <ToastContainer />
-      <div className="w-full min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-8">
-          Register Your Account
-        </h1>
+      <div className="w-full">
+        <div className="w-full mt-18 max-w-sm">
+          {/* header */}
+          <div className="text-center mb-6">
+            <h1 className="text-xl font-bold text-[#2D385E]">
+              Create your account
+            </h1>
+            <p className="mt-2 text-sm text-gray-600">
+              Already have an account?{" "}
+              <button
+                onClick={onSwitch}
+                className="font-medium text-blue-600 hover:text-blue-500"
+              >
+                Login here
+              </button>
+            </p>
+          </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-xl shadow-lg w-full max-w-md space-y-5"
-          encType="multipart/form-data"
-        >
-          {/* Username */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Username
-            </label>
+          {/* form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
+              placeholder="Full Name"
+              required
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg"
-              placeholder="Enter your username"
-              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-md text-gray-900 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
-          </div>
 
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
             <input
               type="email"
+              placeholder="Email address"
+              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg"
-              placeholder="Enter your email"
-              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-md text-gray-900 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
-          </div>
 
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
             <input
               type="password"
+              placeholder="Password"
+              required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg"
-              placeholder="Enter your password"
-              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-md text-gray-900 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
-          </div>
 
-          {/* Contact Number */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Contact Number
-            </label>
             <input
               type="number"
+              placeholder="Contact Number"
               value={contactNo}
               onChange={(e) => setContactNo(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg"
-              placeholder="Enter your contact number"
+              className="w-full px-4 py-3 border border-gray-300 rounded-md text-gray-900 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
-          </div>
 
-          {/* Photo */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Profile Photo
-            </label>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => setPhoto(e.target.files[0])}
-              className="w-full"
+              className="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
-          </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
-          >
-            Register
-          </button>
-        </form>
-
-        {/* OTP Modal */}
-        <Modal open={open} onClose={() => setOpen(false)}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 300,
-              bgcolor: "white",
-              borderRadius: 2,
-              boxShadow: 24,
-              p: 4,
-            }}
-          >
-            <h3 className="text-lg font-semibold mb-2">Enter OTP</h3>
-            <p className="mb-3 text-sm text-gray-600">
-              We sent an OTP to <strong>{email}</strong>
-            </p>
-            <input
-              type="text"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              className="w-full px-3 py-2 border rounded mb-3 text-center"
-            />
             <button
-              onClick={handleVerifyOTP}
-              className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+              type="submit"
+              className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-md text-white bg-[#4D69FF] hover:bg-[#435de6] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
             >
-              Verify & Login
+              Register
             </button>
-            {message && <p className="text-red-500 mt-2">{message}</p>}
-          </Box>
-        </Modal>
+          </form>
+        </div>
       </div>
+
+      {/* otp modal */}
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 320,
+            bgcolor: "white",
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <h3 className="text-lg font-semibold mb-2">Enter OTP</h3>
+          <p className="mb-3 text-sm text-gray-600">
+            We sent an OTP to <strong>{email}</strong>
+          </p>
+          <input
+            type="text"
+            placeholder="Enter OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            className="w-full px-3 py-2 border rounded mb-3 text-center"
+          />
+          <button
+            onClick={handleVerifyOTP}
+            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+          >
+            Verify & Login
+          </button>
+          {message && (
+            <p className="text-red-500 text-center mt-2 text-sm">{message}</p>
+          )}
+        </Box>
+      </Modal>
     </>
   );
 };

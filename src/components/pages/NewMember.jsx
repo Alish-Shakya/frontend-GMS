@@ -13,6 +13,7 @@ const NewMembers = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+
       // console.log(result.data.data);
       setNewMembers(result.data.data);
     } catch (error) {
