@@ -20,7 +20,7 @@ const Hero = () => {
       </div>
 
       {/* Hero Content */}
-      <div className="mt-15 relative z-10 w-full px-4 sm:px-6 md:px-8 lg:px-12 text-white">
+      <div className="md:mt-17 relative z-10 w-full px-4 sm:px-6 md:px-8 lg:px-12 text-white">
         <div className="max-w-3xl">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight">
             Empower Your <br />
@@ -72,6 +72,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      {/* <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black via-[#0b0b0b] to-transparent pointer-events-none"></div> */}
     </section>
   );
 };
