@@ -12,16 +12,19 @@ import AdminLogout from "../components/admin/AdminLogout";
 import AdminProfile from "../components/admin/AdminProfile";
 import AdminUpdate from "../components/admin/AdminUpdate";
 import AdminAuth from "../components/admin/AdminAuth";
-import ProtectedRoute from "../components/admin/ProtectedRoute"; // ✅ add this
+import ProtectedRoute from "../components/admin/ProtectedRoute";
+import Interface from "../components/interface/Interface";
 
 const MyRoutes = () => {
   return (
     <>
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<AdminAuth />} />
+        <Route path="login" element={<AdminAuth />} />
         <Route path="verify-email" element={<AdminVerify />} />
         <Route path="logout" element={<AdminLogout />} />
+
+        <Route path="/" element={<Interface />}></Route>
 
         {/* ✅ Protected Dashboard Routes */}
         <Route
