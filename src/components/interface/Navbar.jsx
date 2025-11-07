@@ -17,12 +17,31 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-8 text-xl text-white font-semibold">
-          <Link to="/"><li className="hover:text-red-600 transition">Home</li></Link>
-          <li className="hover:text-red-600 transition cursor-pointer">About</li>
-          <li className="hover:text-red-600 transition cursor-pointer">Solution</li>
-          <li className="hover:text-red-600 transition cursor-pointer">What is Sahayog</li>
+          <li>
+            <Link to="/" className="hover:text-red-600 transition">
+              Home
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              to="/about"
+              className="hover:text-red-600 transition cursor-pointer"
+            >
+              About
+            </Link>
+          </li>
+
+          <li className="hover:text-red-600 transition cursor-pointer">
+            Solution
+          </li>
+          <li className="hover:text-red-600 transition cursor-pointer">
+            What is Sahayog
+          </li>
           <li className="hover:text-red-600 transition cursor-pointer">Blog</li>
-          <li className="hover:text-red-600 transition cursor-pointer">Contact</li>
+          <li className="hover:text-red-600 transition cursor-pointer">
+            Contact
+          </li>
         </ul>
 
         {/* Manage Gym Button (Desktop) */}
@@ -95,4 +114,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
- 

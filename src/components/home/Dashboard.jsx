@@ -18,62 +18,34 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const Dashboard = () => {
-  let [totalMember, SetTotalMember] = useState([]);
-  let [newMember, setNewMember] = useState([]);
-  let [expiringMember, setExpiringMember] = useState([]);
-
+  const [totalMember, setTotalMember] = useState([]);
+  const [newMember, setNewMember] = useState([]);
+  const [expiringMember, setExpiringMember] = useState([]);
   const token = localStorage.getItem("token");
 
-  const getTotalMember = async () => {
-    try {
-      const result = await axios({
-        url: "http://localhost:4000/member/all-members",
-        method: "get",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      SetTotalMember(result.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getNewMember = async () => {
-    try {
-      const result = await axios({
-        url: "http://localhost:4000/member/new-member",
-        method: "get",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setNewMember(result.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getExpiringMembers = async () => {
-    try {
-      let result = await axios({
-        url: "http://localhost:4000/member/expiring-members",
-        method: "get",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setExpiringMember(result.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    getTotalMember();
-    getNewMember();
-    getExpiringMembers();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const [totalRes, newRes, expiringRes] = await Promise.all([
+          axios.get("http://localhost:4000/member/all-members", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get("http://localhost:4000/member/new-member", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get("http://localhost:4000/member/expiring-members", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+        setTotalMember(totalRes.data.data);
+        setNewMember(newRes.data.data);
+        setExpiringMember(expiringRes.data.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, [token]);
 
   const lineData = [
     { month: "Jan", members: 40 },
@@ -92,15 +64,16 @@ const Dashboard = () => {
   const COLORS = ["#4F46E5", "#F59E0B"];
 
   return (
-    <div className="p-6 w-full md:w-4/5 mx-auto bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-6">
+    <div className="w-full bg-gray-100 min-h-screen px-4 md:px-6 lg:px-10 py-6">
+      {/* Header */}
+      <h1 className="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-2">
         🏋️‍♂️ Admin Dashboard
       </h1>
 
       {/* Top Stats Cards */}
-      <div className="grid grid-cols-4 gap-6 mb-6">
-        <Link to="/dashboard/total-members" className="block">
-          <div className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition cursor-pointer">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+        <Link to="/dashboard/total-members">
+          <div className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition">
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-gray-500 text-sm">Total Members</p>
@@ -119,7 +92,7 @@ const Dashboard = () => {
         </Link>
 
         <Link to="/dashboard/new-members">
-          <div className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition">
+          <div className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition">
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-gray-500 text-sm">New This Month</p>
@@ -136,10 +109,10 @@ const Dashboard = () => {
         </Link>
 
         <Link to="/dashboard/expiring-soon">
-          <div className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition">
+          <div className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition">
             <div className="flex justify-between items-center">
               <div>
-                <p className="text-gray-500 text-sm">Upcoming Renewals</p>
+                <p className="text-gray-500 text-sm">Upcoming Renewal</p>
                 <h2 className="text-3xl font-bold mt-1">
                   {expiringMember.length}
                 </h2>
@@ -153,7 +126,7 @@ const Dashboard = () => {
         </Link>
 
         <Link to="/dashboard/add-members">
-          <div className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition">
+          <div className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition">
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-gray-500 text-sm">Add Member</p>
@@ -169,12 +142,12 @@ const Dashboard = () => {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-3 gap-6 mb-6">
-        <div className="col-span-2 bg-white p-5 rounded-2xl shadow">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+        <div className="col-span-2 bg-white p-6 rounded-xl shadow-md">
           <h3 className="font-semibold text-gray-700 mb-4">
             Revenue & Member Growth
           </h3>
-          <ResponsiveContainer width="100%" height={250}>
+          <ResponsiveContainer width="100%" height={260}>
             <LineChart data={lineData}>
               <XAxis dataKey="month" />
               <YAxis />
@@ -189,18 +162,18 @@ const Dashboard = () => {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl shadow">
+        <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="font-semibold text-gray-700 mb-4">
             Membership Type Breakdown
           </h3>
-          <ResponsiveContainer width="100%" height={250}>
+          <ResponsiveContainer width="100%" height={260}>
             <PieChart>
               <Pie
                 data={pieData}
                 cx="50%"
                 cy="50%"
-                labelLine={false}
                 outerRadius={80}
+                labelLine={false}
                 fill="#8884d8"
                 dataKey="value"
               >
@@ -218,17 +191,17 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Activity Table */}
-      <div className="bg-white p-5 rounded-2xl shadow">
+      <div className="bg-white p-6 rounded-xl shadow-md">
         <h3 className="font-semibold text-gray-700 mb-4">
           Recent Member Activity
         </h3>
-        <table className="w-full text-left">
+        <table className="w-full text-left border-collapse">
           <thead>
             <tr className="text-gray-600 text-sm border-b">
-              <th className="py-2">Member Name</th>
-              <th className="py-2">Status</th>
-              <th className="py-2">Membership Type</th>
-              <th className="py-2 text-right">Last Check-in</th>
+              <th className="py-3">Member Name</th>
+              <th className="py-3">Status</th>
+              <th className="py-3">Membership Type</th>
+              <th className="py-3 text-right">Last Check-in</th>
             </tr>
           </thead>
           <tbody className="text-sm text-gray-700">
