@@ -12,18 +12,19 @@ import AdminProfile from "../components/admin/AdminProfile";
 import AdminUpdate from "../components/admin/AdminUpdate";
 import ProtectedRoute from "../components/admin/ProtectedRoute";
 import DashboardLayout from "../components/home/DashboardLayout";
-import InterfaceRoute from "../components/interface/InterfaceRoute";
 import Home from "../components/interface/Home/Home";
 import About from "../components/interface/about/About";
+import InterfaceLayout from "../components/interface/InterfaceLayout";
 
 const MyRoutes = () => {
   return (
     <Routes>
       {/* Public routes (no sidebar) */}
-      {/* <Route path="/" element={<InterfaceRoute />} /> */}
 
-      <Route path="/" element={<Home />}></Route>
-      <Route path="/about" element={<About />}></Route>
+      <Route path="/" element={<InterfaceLayout />}>
+        <Route index element={<Home />} />
+        <Route path="about" element={<About />} />
+      </Route>
 
       <Route path="/login" element={<AdminAuth />} />
       <Route path="/verify-email" element={<AdminVerify />} />

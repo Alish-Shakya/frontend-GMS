@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { X } from "lucide-react";
 
 const Navbar = () => {
@@ -8,7 +8,7 @@ const Navbar = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <nav className="relative z-50">
+    <nav className="absolute top-0 left-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-6 mt-3 py-3 flex justify-between items-center">
         {/* Logo */}
         <div className="text-4xl font-bold text-red-600 cursor-pointer">
@@ -24,10 +24,7 @@ const Navbar = () => {
           </li>
 
           <li>
-            <Link
-              to="/about"
-              className="hover:text-red-600 transition cursor-pointer"
-            >
+            <Link to="/about" className="hover:text-red-600 transition">
               About
             </Link>
           </li>
@@ -85,9 +82,9 @@ const Navbar = () => {
         <Link to="/" onClick={toggleMenu} className="hover:text-red-400">
           Home
         </Link>
-        <a href="#" onClick={toggleMenu} className="hover:text-red-400">
+        <Link to="/about" onClick={toggleMenu} className="hover:text-red-400">
           About
-        </a>
+        </Link>
         <a href="#" onClick={toggleMenu} className="hover:text-red-400">
           Solution
         </a>

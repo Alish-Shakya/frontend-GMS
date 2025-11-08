@@ -1,7 +1,18 @@
 import React from "react";
+import AboutHeader from "./AboutHeader";
+import WhatWeDo from "./WhatWeDo";
+import OurMission from "./OurMission";
+import Team from "./Team";
 
 const About = () => {
-  return <div>hello yo chai hamro about page ho hai</div>;
+  return (
+    <div>
+      <AboutHeader />
+      <WhatWeDo />
+      <OurMission />
+      <Team />
+    </div>
+  );
 };
 
 export default About;

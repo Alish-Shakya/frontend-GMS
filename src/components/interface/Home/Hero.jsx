@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Play } from "lucide-react";
-import Navbar from "../Navbar";
 
 const Hero = () => {
   const heroRef = useRef(null);
@@ -31,21 +30,14 @@ const Hero = () => {
   return (
     <section
       ref={heroRef}
-      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-cover bg-center"
+      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-cover bg-center pt-20"
       style={{
         backgroundImage: `url("/images/bg.jpg")`,
       }}
     >
-      {/* Dark overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent"></div>
 
-      {/* Navbar */}
-      <div className="absolute top-0 left-0 w-full z-20">
-        <Navbar />
-      </div>
-
-      {/* Hero Content */}
-      <div className="mt-17 relative z-10 w-full px-5 sm:px-8 md:px-12 text-white flex flex-col justify-center items-start">
+      <div className="relative z-10 w-full px-5 sm:px-8 md:px-12 text-white flex flex-col justify-center items-start">
         <div className="max-w-3xl">
           <h1
             ref={headingRef}
