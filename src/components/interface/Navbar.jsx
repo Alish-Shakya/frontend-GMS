@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { X } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  // Helper to check active route
+  const isActive = (path) => location.pathname === path;
 
   return (
     <nav className="absolute top-0 left-0 w-full z-50">
@@ -18,26 +22,54 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-8 text-xl text-white font-semibold">
           <li>
-            <Link to="/" className="hover:text-red-600 transition">
+            <Link
+              to="/"
+              className={`transition ${
+                isActive("/") ? "text-red-600" : "hover:text-red-600"
+              }`}
+            >
               Home
             </Link>
           </li>
 
           <li>
-            <Link to="/about" className="hover:text-red-600 transition">
+            <Link
+              to="/about"
+              className={`transition ${
+                isActive("/about") ? "text-red-600" : "hover:text-red-600"
+              }`}
+            >
               About
             </Link>
           </li>
 
-          <li className="hover:text-red-600 transition cursor-pointer">
-            Solution
+          <li>
+            <a href="#" className="hover:text-red-600 transition">
+              Solution
+            </a>
           </li>
-          <li className="hover:text-red-600 transition cursor-pointer">
-            What is Sahayog
+
+          <li>
+            <a href="#" className="hover:text-red-600 transition">
+              What is Sahayog
+            </a>
           </li>
-          <li className="hover:text-red-600 transition cursor-pointer">Blog</li>
-          <li className="hover:text-red-600 transition cursor-pointer">
-            Contact
+
+          <li>
+            <Link
+              to="/blog"
+              className={`transition ${
+                isActive("/blog") ? "text-red-600" : "hover:text-red-600"
+              }`}
+            >
+              Blog
+            </Link>
+          </li>
+
+          <li>
+            <a href="#" className="hover:text-red-600 transition">
+              Contact
+            </a>
           </li>
         </ul>
 
@@ -82,18 +114,23 @@ const Navbar = () => {
         <Link to="/" onClick={toggleMenu} className="hover:text-red-400">
           Home
         </Link>
+
         <Link to="/about" onClick={toggleMenu} className="hover:text-red-400">
           About
         </Link>
+
         <a href="#" onClick={toggleMenu} className="hover:text-red-400">
           Solution
         </a>
+
         <a href="#" onClick={toggleMenu} className="hover:text-red-400">
           What is Sahayog
         </a>
-        <a href="#" onClick={toggleMenu} className="hover:text-red-400">
+
+        <Link to="/blog" onClick={toggleMenu} className="hover:text-red-400">
           Blog
-        </a>
+        </Link>
+
         <a href="#" onClick={toggleMenu} className="hover:text-red-400">
           Contact
         </a>

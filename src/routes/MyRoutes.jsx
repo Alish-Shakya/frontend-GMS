@@ -15,6 +15,7 @@ import DashboardLayout from "../components/home/DashboardLayout";
 import Home from "../components/interface/Home/Home";
 import About from "../components/interface/about/About";
 import InterfaceLayout from "../components/interface/InterfaceLayout";
+import Blog from "../components/interface/blog/Blog";
 
 const MyRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const MyRoutes = () => {
       <Route path="/" element={<InterfaceLayout />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
+        <Route path="blog" element={<Blog />}></Route>
       </Route>
 
       <Route path="/login" element={<AdminAuth />} />
