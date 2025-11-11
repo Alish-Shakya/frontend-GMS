@@ -16,6 +16,8 @@ import Home from "../components/interface/Home/Home";
 import About from "../components/interface/about/About";
 import InterfaceLayout from "../components/interface/InterfaceLayout";
 import Blog from "../components/interface/blog/Blog";
+import ForgotPassword from "../components/admin/ForgotPassword";
+import ResetPassword from "../components/admin/ResetPassword";
 
 const MyRoutes = () => {
   return (
@@ -31,6 +33,8 @@ const MyRoutes = () => {
       <Route path="/login" element={<AdminAuth />} />
       <Route path="/verify-email" element={<AdminVerify />} />
       <Route path="/logout" element={<AdminLogout />} />
+      {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
+      <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* Protected routes with sidebar */}
       <Route
