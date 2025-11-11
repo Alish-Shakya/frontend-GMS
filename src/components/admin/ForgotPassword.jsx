@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const ForgotPassword = ({ onBack }) => {
   const [email, setEmail] = useState("");
@@ -9,16 +10,19 @@ const ForgotPassword = ({ onBack }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email) {
-      toast.error("Please enter your email!");
-      return;
-    }
 
-    // For now just simulate sending link
-    setTimeout(() => {
+    try {
+      let resutl = await axios.post(
+        "http:localhost://4000/webUser/forgot-password",
+        { email }
+      );
+
+      toast.success(result.data.message);
       setIsSent(true);
-      toast.success("✅ Password reset link sent to your email!");
-    }, 600);
+      setEmail("");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
   };
 
   return (
@@ -27,19 +31,17 @@ const ForgotPassword = ({ onBack }) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -80 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
+      className="p-6 max-w-md mx-auto bg-white shadow-md rounded-lg"
     >
       <ToastContainer />
-      {/* Header */}
-      <div className="text-center mt-25 mb-6">
-        <h1 className="text-xl font-bold text-[#2D385E]">
-          Forgot your password?
-        </h1>
+
+      <div className="text-center mb-6">
+        <h1 className="text-xl font-bold text-[#2D385E]">Forgot Password?</h1>
         <p className="mt-2 text-sm text-gray-600">
           Enter your email address and we’ll send you a reset link.
         </p>
       </div>
 
-      {/* Form */}
       {!isSent ? (
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -66,7 +68,6 @@ const ForgotPassword = ({ onBack }) => {
         </div>
       )}
 
-      {/* Back Button */}
       <div className="mt-6 text-center">
         <button
           onClick={onBack}
