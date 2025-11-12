@@ -15,7 +15,6 @@ const AdminLogin = ({ onSwitch, onSwitchForgot }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!email || !password) {
       setErrorMessage("Please fill in all fields!");
       setTimeout(() => setErrorMessage(""), 4000);
@@ -23,22 +22,42 @@ const AdminLogin = ({ onSwitch, onSwitchForgot }) => {
     }
 
     setIsLoading(true);
+
     try {
       const { data } = await axios.post("http://localhost:4000/webUser/login", {
         email,
         password,
       });
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.result));
-      sessionStorage.setItem("isLogin", "true");
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.result));
+        sessionStorage.setItem("isLogin", "true");
 
-      toast.success("Welcome back!");
-      navigate("/dashboard");
+        toast.success("Welcome back!");
+        navigate("/dashboard");
+      }
     } catch (error) {
       console.error(error);
-      setErrorMessage("Invalid email or password");
-      setTimeout(() => setErrorMessage(""), 3000);
+      let message = "Something went wrong. Please try again.";
+
+      if (error.response && error.response.data?.message) {
+        const errMsg = error.response.data.message.toLowerCase();
+        if (errMsg.includes("not been registered")) {
+          message =
+            "This account has not been registered. Please register to continue.";
+        } else if (errMsg.includes("verify your email")) {
+          message =
+            "Your email is not verified. Please verify before logging in.";
+        } else if (errMsg.includes("invalid password")) {
+          message = "Incorrect password. Please try again.";
+        }
+      }
+
+      // Display inline error and toast
+      setErrorMessage(message);
+      toast.error(message);
+      setTimeout(() => setErrorMessage(""), 4000);
     } finally {
       setIsLoading(false);
     }
@@ -51,13 +70,9 @@ const AdminLogin = ({ onSwitch, onSwitchForgot }) => {
         <motion.div
           key="login-form"
           initial={{ opacity: 0, x: 80 }}
-          animate={
-            errorMessage
-              ? { x: [0, -10, 10, -10, 10, 0] }
-              : { opacity: 1, x: 0 }
-          }
+          animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -80 }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
         >
           {/* Header */}
           <div className="text-center mt-18 mb-6">
@@ -68,7 +83,7 @@ const AdminLogin = ({ onSwitch, onSwitchForgot }) => {
               Don’t have an account?{" "}
               <button
                 onClick={onSwitch}
-                className="font-medium text-blue-600 hover:text-blue-500"
+                className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
               >
                 Sign Up Free!
               </button>
@@ -96,7 +111,7 @@ const AdminLogin = ({ onSwitch, onSwitchForgot }) => {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Input */}
-            <input
+            <motion.input
               type="email"
               placeholder="Email address"
               required
@@ -104,35 +119,44 @@ const AdminLogin = ({ onSwitch, onSwitchForgot }) => {
               onChange={(e) => setEmail(e.target.value)}
               autoFocus
               autoComplete="email"
-              className="w-full px-4 py-3 border border-gray-300 rounded-md text-gray-900 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="w-full px-4 py-3 border border-gray-300 rounded-md text-gray-900 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all duration-200"
             />
 
             {/* Password Input + Toggle */}
             <div className="relative">
-              <input
+              <motion.input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
-                className="w-full px-4 py-3 border border-gray-300 rounded-md text-gray-900 focus:ring-blue-500 focus:border-blue-500 sm:text-sm pr-10"
+                className="w-full px-4 py-3 border border-gray-300 rounded-md text-gray-900 focus:ring-blue-500 focus:border-blue-500 sm:text-sm pr-10 transition-all duration-200"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 transition-colors"
               >
                 {showPassword ? "🙈" : "👁️"}
               </button>
             </div>
 
             {/* Error Message */}
-            {errorMessage && (
-              <div className="text-red-500 text-sm font-medium text-center bg-red-100 p-3 rounded-md">
-                {errorMessage}
-              </div>
-            )}
+            <AnimatePresence>
+              {errorMessage && (
+                <motion.div
+                  key="error"
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-red-500 text-sm font-medium text-center bg-red-100 p-3 rounded-md"
+                >
+                  {errorMessage}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Remember / Forgot */}
             <div className="flex items-center justify-between text-sm">
@@ -145,17 +169,18 @@ const AdminLogin = ({ onSwitch, onSwitchForgot }) => {
               </label>
               <p
                 onClick={onSwitchForgot}
-                className="font-medium text-blue-600 hover:text-blue-500 cursor-pointer"
+                className="font-medium text-blue-600 hover:text-blue-500 cursor-pointer transition-colors"
               >
                 Forgot password?
               </p>
             </div>
 
             {/* Login Button */}
-            <button
+            <motion.button
               type="submit"
+              whileTap={{ scale: 0.98 }}
               disabled={isLoading}
-              className={`w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-bold rounded-md text-white transition-colors ${
+              className={`w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-bold rounded-md text-white transition-colors duration-200 ${
                 isLoading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-[#4D69FF] hover:bg-[#435de6]"
@@ -188,7 +213,7 @@ const AdminLogin = ({ onSwitch, onSwitchForgot }) => {
               ) : (
                 "Login"
               )}
-            </button>
+            </motion.button>
           </form>
         </motion.div>
       </AnimatePresence>

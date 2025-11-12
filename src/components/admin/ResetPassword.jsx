@@ -1,54 +1,69 @@
+import React, { useState } from "react";
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { toast } from "react-toastify";
 
-const ResetPassword = () => {
-  let [password, setNewPassword] = useState("");
-
-  let navigate = useNavigate();
-
-  let [query] = useSearchParams();
-  let token = query.get("token");
+const ResetPassword = ({ email, onBackToLogin }) => {
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password !== confirm) {
+      toast.error("Passwords do not match");
+      return;
+    }
 
-    let data = {
-      password: password,
-    };
-
+    setLoading(true);
     try {
-      let result = await axios({
-        url: `http://localhost:4000/webUser/reset-password`,
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        data: data,
+      const res = await axios.post("http://localhost:5000/api/reset-password", {
+        email,
+        password,
       });
-      console.log(result);
-      navigate(`/login`);
-    } catch (error) {}
+      toast.success(res.data.message);
+      onBackToLogin(); // redirect to login
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Reset failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <br />
-        <div>
-          <label htmlFor="password">New Password : </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            value={password}
-            onChange={(e) => {
-              setNewPassword(e.target.value);
-            }}
-          />
-        </div>
-        <br />
-        <button>Set new Password</button>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-2xl shadow-md w-80"
+      >
+        <h2 className="text-xl font-semibold mb-4 text-center">
+          Reset Password
+        </h2>
+
+        <input
+          type="password"
+          placeholder="New Password"
+          className="w-full border p-2 rounded mb-3"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          className="w-full border p-2 rounded mb-4"
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+          required
+        />
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600"
+        >
+          {loading ? "Resetting..." : "Reset Password"}
+        </button>
       </form>
     </div>
   );
