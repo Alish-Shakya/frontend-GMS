@@ -6,9 +6,6 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
 } from "recharts";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -21,25 +18,30 @@ const Dashboard = () => {
   const [totalMember, setTotalMember] = useState([]);
   const [newMember, setNewMember] = useState([]);
   const [expiringMember, setExpiringMember] = useState([]);
+  const [revenue, setRevenue] = useState([]);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [totalRes, newRes, expiringRes] = await Promise.all([
-          axios.get("http://localhost:4000/member/all-members", {
+        const [totalRes, newRes, expiringRes, revenueRes] = await Promise.all([
+          axios.get("http://localhost:8000/member/all-members", {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get("http://localhost:4000/member/new-member", {
+          axios.get("http://localhost:8000/member/new-member", {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get("http://localhost:4000/member/expiring-members", {
+          axios.get("http://localhost:8000/member/expiring-members", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get("http://localhost:8000/member/revenue", {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
         setTotalMember(totalRes.data.data);
         setNewMember(newRes.data.data);
         setExpiringMember(expiringRes.data.data);
+        setRevenue(revenueRes.data.data);
       } catch (err) {
         console.error(err);
       }
@@ -162,31 +164,15 @@ const Dashboard = () => {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-md">
-          <h3 className="font-semibold text-gray-700 mb-4">
-            Membership Type Breakdown
-          </h3>
-          <ResponsiveContainer width="100%" height={260}>
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                labelLine={false}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {pieData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+        <div className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-gray-500 text-sm">Total Revenue</p>
+              <h2 className="text-3xl font-bold mt-1">Rs.{revenue}</h2>
+              <p className="text-green-500 text-xs mt-1">+8% vs last month</p>
+            </div>
+            <div className="bg-purple-100 p-3 rounded-full">💰</div>
+          </div>
         </div>
       </div>
 

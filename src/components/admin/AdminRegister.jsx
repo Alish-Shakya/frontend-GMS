@@ -31,7 +31,7 @@ const AdminRegister = ({ onSwitch }) => {
     if (photo) formData.append("photo", photo);
 
     try {
-      await axios.post("http://localhost:4000/webUser/register", formData, {
+      await axios.post("http://localhost:8000/webUser/register", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       toast.success("📩 OTP sent to your email!");
@@ -47,13 +47,13 @@ const AdminRegister = ({ onSwitch }) => {
   const handleVerifyOTP = async () => {
     try {
       const verifyRes = await axios.post(
-        "http://localhost:4000/webUser/verify-otp",
+        "http://localhost:8000/webUser/verify-otp",
         { email, otp }
       );
 
       if (verifyRes.data.success) {
         const loginRes = await axios.post(
-          "http://localhost:4000/webUser/login",
+          "http://localhost:8000/webUser/login",
           { email, password }
         );
 
@@ -61,7 +61,7 @@ const AdminRegister = ({ onSwitch }) => {
           const token = loginRes.data.token;
           localStorage.setItem("token", token);
           const profileRes = await axios.get(
-            "http://localhost:4000/webUser/myProfile",
+            "http://localhost:8000/webUser/myProfile",
             { headers: { Authorization: `Bearer ${token}` } }
           );
           if (profileRes.data.success) {

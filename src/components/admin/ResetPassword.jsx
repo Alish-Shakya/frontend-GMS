@@ -16,10 +16,13 @@ const ResetPassword = ({ email, onBackToLogin }) => {
 
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/reset-password", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        "http://localhost:8000/webUser/reset-password",
+        {
+          email,
+          password,
+        }
+      );
       toast.success(res.data.message);
       onBackToLogin(); // redirect to login
     } catch (err) {

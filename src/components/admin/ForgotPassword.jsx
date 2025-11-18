@@ -14,7 +14,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:4000/webUser/forgot-password",
+        "http://localhost:8000/webUser/forgot-password",
         { email }
       );
       if (res.data.success) {

@@ -24,7 +24,7 @@ const AdminLogin = ({ onSwitch, onSwitchForgot }) => {
     setIsLoading(true);
 
     try {
-      const { data } = await axios.post("http://localhost:4000/webUser/login", {
+      const { data } = await axios.post("http://localhost:8000/webUser/login", {
         email,
         password,
       });

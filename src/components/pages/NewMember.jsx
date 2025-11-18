@@ -8,7 +8,7 @@ const NewMembers = () => {
   const getNewMembers = async () => {
     try {
       const result = await axios.get(
-        "http://localhost:4000/member/new-member",
+        "http://localhost:8000/member/new-member",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

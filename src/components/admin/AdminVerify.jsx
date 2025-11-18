@@ -11,7 +11,7 @@ const AdminVerify = () => {
   let verifyEmail = async () => {
     try {
       let result = await axios({
-        url: "http://localhost:4000/webUser/verifyEmail",
+        url: "http://localhost:8000/webUser/verifyEmail",
         method: "post",
         headers: {
           Authorization: `Bearer ${token}`,

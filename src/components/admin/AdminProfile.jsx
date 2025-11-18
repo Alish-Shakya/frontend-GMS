@@ -10,7 +10,7 @@ const AdminProfile = () => {
   const getProfile = async () => {
     try {
       const result = await axios({
-        url: "http://localhost:4000/webUser/myProfile",
+        url: "http://localhost:8000/webUser/myProfile",
         method: "get",
         headers: { Authorization: `Bearer ${token}` },
       });

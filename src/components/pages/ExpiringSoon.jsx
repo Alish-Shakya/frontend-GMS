@@ -8,7 +8,7 @@ const ExpiringSoon = () => {
   const getExpiringMember = async () => {
     try {
       const result = await axios.get(
-        "http://localhost:4000/member/expiring-members",
+        "http://localhost:8000/member/expiring-members",
         {
           headers: {
             Authorization: `Bearer ${token}`,

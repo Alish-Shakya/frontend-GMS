@@ -19,7 +19,7 @@ const TotalMembers = () => {
 
   const fetchMembers = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/member/all-members");
+      const res = await axios.get("http://localhost:8000/member/all-members");
       setMembers(res.data.data);
       setFilteredMembers(res.data.data);
     } catch (error) {

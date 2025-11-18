@@ -10,10 +10,13 @@ const VerifyCode = ({ email, onVerified }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/verify-code", {
-        email,
-        code,
-      });
+      const res = await axios.post(
+        "http://localhost:8000/webUser/verify-code",
+        {
+          email,
+          code,
+        }
+      );
 
       if (res.data.success) {
         toast.success("Code verified!");

@@ -36,7 +36,7 @@ const AddMembers = () => {
       Object.keys(formData).forEach((key) => data.append(key, formData[key]));
       if (photo) data.append("photo", photo);
 
-      await axios.post("http://localhost:4000/member/add-member", data, {
+      await axios.post("http://localhost:8000/member/add-member", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

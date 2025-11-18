@@ -12,22 +12,22 @@ import AdminProfile from "../components/admin/AdminProfile";
 import AdminUpdate from "../components/admin/AdminUpdate";
 import ProtectedRoute from "../components/admin/ProtectedRoute";
 import DashboardLayout from "../components/home/DashboardLayout";
-import Home from "../components/interface/Home/Home";
-import About from "../components/interface/about/About";
-import InterfaceLayout from "../components/interface/InterfaceLayout";
-import Blog from "../components/interface/blog/Blog";
-import ForgotPassword from "../components/admin/ForgotPassword";
+
 import ResetPassword from "../components/admin/ResetPassword";
+import GymLandingPage from "../components/interface/home/GymLandingPage";
+import PricingDuration from "../components/interface/price/Pricing";
 
 const MyRoutes = () => {
   return (
     <Routes>
       {/* Public routes (no sidebar) */}
 
-      <Route path="/" element={<InterfaceLayout />}>
-        <Route index element={<Home />} />
-        <Route path="about" element={<About />} />
-        <Route path="blog" element={<Blog />}></Route>
+      {/* <Navbar /> */}
+
+      <Route path="/" element={<Outlet />}>
+        <Route index element={<GymLandingPage />}></Route>
+        <Route path="/pricing" element={<PricingDuration />} />
+        {/* <Route path="/contact" element={<Contact />} /> */}
       </Route>
 
       <Route path="/login" element={<AdminAuth />} />
